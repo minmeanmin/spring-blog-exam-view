@@ -25,6 +25,20 @@ public class BoardRepository {
         return boardList;
     }
 
+    public List<Board> findAll(int page, String keyword) {
+        final int COUNT = 5;
+        int value = page*5;
+        Query query = em.createNativeQuery("select * from board_tb where title like ? order by id desc limit ?, ?", Board.class);
+        query.setParameter(1, "%" + keyword + "%");
+        query.setParameter(2, value);
+        query.setParameter(3, COUNT);
+
+        List<Board> boardList = query.getResultList();
+
+        return boardList;
+    }
+
+
     @Transactional
     public void save(BoardRequest.SaveDTO requestDTO) {
         Query query = em.createNativeQuery("insert into board_tb(author, title, content) values(?,?,?)");
