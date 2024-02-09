@@ -95,7 +95,18 @@ public class BoardController {
     }
 
     @PostMapping("/board/{id}/update")
-    public String update(@PathVariable int id, BoardRequest.UpdateDTO requestDTO){
+    public String update(@PathVariable int id, BoardRequest.UpdateDTO requestDTO, HttpServletRequest request){
+
+        if (requestDTO.getTitle().length() > 20) {
+            request.setAttribute("status", 400);
+            request.setAttribute("msg", "title의 길이가 20자를 초과해서는 안 됩니다");
+            return "error/40x"; // BadRequest
+        }
+        if (requestDTO.getContent().length() > 20) {
+            request.setAttribute("status", 400);
+            request.setAttribute("msg", "content의 길이가 20자를 초과해서는 안 됩니다");
+            return "error/40x"; // BadRequest
+        }
 
         // update board_tb set title = ?, content = ? where id = ?;
         boardRepository.update(requestDTO, id);
