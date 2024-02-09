@@ -26,6 +26,7 @@ public class BoardController {
             boardList = boardRepository.findAll(page, keyword);
         }
         request.setAttribute("boardList", boardList);
+        request.setAttribute("keyword", keyword);
 
         int currentPage = page;
         int nextPage = currentPage + 1;
@@ -34,7 +35,13 @@ public class BoardController {
         request.setAttribute("prevPage", prevPage);
         boolean first = (currentPage == 0 ? true : false);
 
-        int totalCount = boardRepository.count();
+        int totalCount;
+        if(keyword.isBlank()){
+            totalCount = boardRepository.count();
+        }else{
+            totalCount = boardRepository.count(keyword);
+        }
+
         int paging = 5;
         int totalPage = totalCount / paging;
         if (totalCount % paging != 0) {

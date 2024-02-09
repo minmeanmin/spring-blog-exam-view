@@ -82,4 +82,14 @@ public class BoardRepository {
 
         return count.intValue();
     }
+
+    public int count(String keyword){
+        Query query = em.createNativeQuery("select count(*) from board_tb where title like ? ");
+        query.setParameter(1, "%" + keyword + "%");
+
+        Long count = (Long) query.getSingleResult();
+
+        return count.intValue();
+    }
+
 }
